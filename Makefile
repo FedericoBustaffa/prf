@@ -25,7 +25,7 @@ FLAGS += $(INCLUDES)
 FLAGS += $(DEFINES)
 FLAGS += $(DEPSFLAGS)
 
-# default compilation is with opt flags
+# default mode is RELEASE
 BUILD_TYPE ?= RELEASE
 ifeq ($(BUILD_TYPE),DEBUG)
 	FLAGS += $(DBGFLAGS)
