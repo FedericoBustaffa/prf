@@ -1,70 +1,66 @@
 #include "csv.hpp"
 
 #include <fstream>
-#include <iostream> // to remove
-#include <regex>
 #include <sstream>
 #include <vector>
 
 namespace csv
 {
 
-field_type infer_type(const std::string& s)
+frame::frame(const std::vector<std::string>& content, size_t ncols)
+    : m_content(content), m_rows(content.size() / ncols), m_cols(ncols)
 {
-    std::regex integer(R"(^[+-]?[0-9]+$)");
-    std::regex floating_point(
-        R"(^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?$)");
-
-    if (std::regex_search(s, integer))
-        return field_type::integer;
-
-    if (std::regex_search(s, floating_point))
-        return field_type::floating_point;
-
-    return field_type::categorical;
 }
 
-dataframe read(const char* filepath, char separator)
+std::vector<std::string_view> frame::operator[](size_t i) const
+{
+    std::vector<std::string_view> r;
+    for (size_t j = 0; j < m_cols; j++)
+        r.push_back(m_content[i * m_cols + j]);
+
+    return r;
+}
+
+std::vector<std::string_view> frame::col(size_t i) const
+{
+    std::vector<std::string_view> c;
+    for (size_t j = 0; j < m_rows; j++)
+        c.push_back(m_content[j * m_cols + i]);
+
+    return c;
+}
+
+frame::~frame() {}
+
+frame read(const char* filepath)
 {
     std::ifstream file(filepath);
     std::string line;
     std::stringstream ss;
     std::string word;
 
-    std::vector<std::string> row;
-    std::vector<field_type> types;
-    std::vector<std::vector<std::string>> table;
+    // one dimensional array to save all content
+    std::vector<std::string> content;
 
-    // read the first line and infer types
+    // do a first line read to know num of columns
     std::getline(file, line);
     ss << line;
-    while (std::getline(ss, word))
-    {
-        types.push_back(infer_type(word));
-        row.push_back(word);
-    }
+    while (std::getline(ss, word, ','))
+        content.emplace_back(word);
 
+    // save number of columns
+    size_t ncols = content.size();
+
+    // read the rest of the file
     while (std::getline(file, line))
     {
-        ss << line;
-        row.clear();
-        while (std::getline(ss, word, separator))
-        {
-            row.push_back(word);
-        }
-
-        table.push_back(row);
         ss.clear();
+        ss << line;
+        while (std::getline(ss, word, ','))
+            content.push_back(word);
     }
 
-    for (const auto& r : table)
-    {
-        for (const auto& c : r)
-            std::cout << c << ", " << std::flush;
-        std::cout << std::endl;
-    }
-
-    return {};
+    return frame(content, ncols);
 }
 
 }; // namespace csv

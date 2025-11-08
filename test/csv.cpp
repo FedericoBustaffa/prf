@@ -10,7 +10,10 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    auto df = csv::read(argv[1]);
+    csv::frame df = csv::read(argv[1]);
+    std::cout << df[0] << std::endl;
+    std::cout << df.col(0) << std::endl;
+    std::cout << df << std::endl;
 
     return 0;
 }
