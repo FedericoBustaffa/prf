@@ -5,16 +5,16 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++20
 
 # flags for debug compilation - enabled if run "make -DBUILD_TYPE=DEBUG"
-DBGFLAGS = -g
+DBGFLAGS = -g -DDEBUG
 
 # flags for optimized compilation - disabled if compiled in debug mode
-OPTFLAGS = -O2 -march=native
+OPTFLAGS = -O2 -march=native -DNDEBUG
 
 # dependencies flags
 DEPSFLAGS = -MMD -MP
 
-# specify include directories with -I<dir>
-INCLUDES = -I./include/ -I./csv-parser/single_include/
+# include directories
+INCLUDES = -I./include/
 
 # specify preprocessor definitions
 DEFINES = 
@@ -23,16 +23,6 @@ DEFINES =
 FLAGS = $(CXXFLAGS)
 FLAGS += $(INCLUDES)
 FLAGS += $(DEFINES)
-
-# default mode is RELEASE
-BUILD_TYPE ?= RELEASE
-ifeq ($(BUILD_TYPE),DEBUG)
-	FLAGS += $(DBGFLAGS)
-else ifeq ($(BUILD_TYPE),RELEASE)
-	FLAGS += $(OPTFLAGS)
-else
-	$(error "Invalid BUILD_TYPE. Use DEBUG or RELEASE.")
-endif
 
 # link libraries
 LIBS =
@@ -55,7 +45,12 @@ OBJECTS = $(patsubst $(SOURCE_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SOURCES))
 
 TARGETS = $(patsubst test/%.cpp, test/%.out, $(TESTS))
 
+all: FLAGS += $(OPTFLAGS)
 all: $(BUILD_DIR) test/$(TARGETS)
+
+debug: FLAGS += $(DBGFLAGS)
+debug: $(BUILD_DIR) test/$(TARGETS)
+
 
 $(BUILD_DIR):
 	@mkdir -p $@
@@ -74,4 +69,3 @@ clean-fast:
 clean: clean-fast
 	-rm -rf $(TARGETS)
 
-recompile: clean all

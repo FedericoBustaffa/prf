@@ -1,8 +1,7 @@
 #include <iostream>
+#include <vector>
 
-#include <csv.hpp>
-
-using namespace csv;
+#include "csv.hpp"
 
 int main(int argc, const char** argv)
 {
@@ -12,16 +11,18 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    CSVReader reader(argv[1]);
-    for (const CSVRow& row : reader)
-    {
-        for (const CSVField& field : row)
-            std::cout << field.get_sv() << " " << std::flush;
-        std::cout << std::endl;
-    }
+    std::vector<std::string> headers = {"sepal_length", "sepal_width",
+                                        "petal_length", "petal_width", "label"};
+    dataframe df = csv::read(argv[1], headers);
 
-    for (const auto& cn : reader.get_col_names())
-        std::cout << cn << std::endl;
+    std::cout << "rows: " << df.rows() << std::endl;
+    std::cout << "columns: " << df.columns() << std::endl;
+
+    for (const auto& h : df.headers())
+        std::cout << "header: " << h << std::endl;
+
+    for (const auto& v : df["sepal_length"])
+        std::cout << v << std::endl;
 
     return 0;
 }
