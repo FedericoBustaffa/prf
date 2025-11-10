@@ -33,9 +33,23 @@ std::vector<double> convert(const std::vector<std::string>& values)
     return converted;
 }
 
-std::pair<matrix, matrix> build_dataset(const dataframe& df,
-                                        const std::string_view& target)
+std::pair<std::vector<std::vector<double>>, std::vector<double>> build_dataset(
+    const dataframe& df, const std::string& target)
 {
-}
+    std::vector<double> y = df[target].to_vec();
 
-double accuracy(matrix predicted, matrix target) {}
+    std::vector<std::vector<double>> X;
+    for (size_t i = 0; i < df.nrows(); i++)
+    {
+        std::vector<double> tmp;
+        for (size_t j = 0; j < df.ncolumns(); j++)
+        {
+            if (df.headers()[j] != target)
+                tmp.push_back(df[i].get(j));
+
+            X.push_back(tmp);
+        }
+    }
+
+    return {X, y};
+}

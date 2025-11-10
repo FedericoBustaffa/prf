@@ -1,7 +1,7 @@
 #include <iostream>
-#include <vector>
 
 #include "csv.hpp"
+#include "utils.hpp"
 
 int main(int argc, const char** argv)
 {
@@ -11,9 +11,7 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    std::vector<std::string> headers = {"sepal_length", "sepal_width",
-                                        "petal_length", "petal_width", "label"};
-    dataframe df = read_csv(argv[1], headers);
+    dataframe df = read_csv(argv[1]);
 
     std::cout << "--- info ---" << std::endl;
     std::cout << "shape: (" << df.nrows() << ", " << df.ncolumns() << ")"
@@ -21,6 +19,14 @@ int main(int argc, const char** argv)
 
     for (const auto& h : df.headers())
         std::cout << h << ": " << df[h].type() << std::endl;
+
+    auto [X, y] = build_dataset(df, "class");
+    for (size_t i = 0; i < X.size(); i++)
+    {
+        for (size_t j = 0; j < X[i].size(); j++)
+            std::cout << X[i][j] << std::flush;
+        std::cout << std::endl;
+    }
 
     return 0;
 }

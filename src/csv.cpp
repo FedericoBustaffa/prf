@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#include <iostream>
+
 std::vector<std::string> readline(std::ifstream& file)
 {
     std::string line;

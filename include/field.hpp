@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class field
@@ -28,7 +29,9 @@ public:
         return m_content[i];
     }
 
-    std::vector<double> as_double() const;
+    inline double get(size_t i) { return m_dict[m_content[i]]; }
+
+    std::vector<double> to_vec() const;
 
     ~field();
 
@@ -36,6 +39,7 @@ private:
     datatype m_type;
     std::string m_header;
     std::vector<std::string> m_content;
+    std::unordered_map<std::string, double> m_dict;
 };
 
 inline std::ostream& operator<<(std::ostream& os, field::datatype dt)

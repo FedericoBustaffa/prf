@@ -9,12 +9,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "build/csv.o",
-      "src/csv.cpp"
+      "build/dataframe.o",
+      "src/dataframe.cpp"
     ],
     "directory": "/home/federico/dev/cpp/prf",
-    "file": "/home/federico/dev/cpp/prf/src/csv.cpp",
-    "output": "/home/federico/dev/cpp/prf/build/csv.o"
+    "file": "/home/federico/dev/cpp/prf/src/dataframe.cpp",
+    "output": "/home/federico/dev/cpp/prf/build/dataframe.o"
   },
   {
     "arguments": [
@@ -26,12 +26,46 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "build/dataframe.o",
-      "src/dataframe.cpp"
+      "build/vector.o",
+      "src/vector.cpp"
     ],
     "directory": "/home/federico/dev/cpp/prf",
-    "file": "/home/federico/dev/cpp/prf/src/dataframe.cpp",
-    "output": "/home/federico/dev/cpp/prf/build/dataframe.o"
+    "file": "/home/federico/dev/cpp/prf/src/vector.cpp",
+    "output": "/home/federico/dev/cpp/prf/build/vector.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-std=c++20",
+      "-I./include/",
+      "-g",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "build/field.o",
+      "src/field.cpp"
+    ],
+    "directory": "/home/federico/dev/cpp/prf",
+    "file": "/home/federico/dev/cpp/prf/src/field.cpp",
+    "output": "/home/federico/dev/cpp/prf/build/field.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-Wall",
+      "-std=c++20",
+      "-I./include/",
+      "-g",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "build/utils.o",
+      "src/utils.cpp"
+    ],
+    "directory": "/home/federico/dev/cpp/prf",
+    "file": "/home/federico/dev/cpp/prf/src/utils.cpp",
+    "output": "/home/federico/dev/cpp/prf/build/utils.o"
   },
   {
     "arguments": [
@@ -60,12 +94,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "build/random_forest.o",
-      "src/random_forest.cpp"
+      "build/csv.o",
+      "src/csv.cpp"
     ],
     "directory": "/home/federico/dev/cpp/prf",
-    "file": "/home/federico/dev/cpp/prf/src/random_forest.cpp",
-    "output": "/home/federico/dev/cpp/prf/build/random_forest.o"
+    "file": "/home/federico/dev/cpp/prf/src/csv.cpp",
+    "output": "/home/federico/dev/cpp/prf/build/csv.o"
   },
   {
     "arguments": [
@@ -79,7 +113,9 @@
       "build/csv.o",
       "build/dataframe.o",
       "build/decision_tree.o",
-      "build/random_forest.o",
+      "build/field.o",
+      "build/utils.o",
+      "build/vector.o",
       "-o",
       "test/csv.out",
       "test/csv.cpp"
@@ -87,5 +123,28 @@
     "directory": "/home/federico/dev/cpp/prf",
     "file": "/home/federico/dev/cpp/prf/test/csv.cpp",
     "output": "/home/federico/dev/cpp/prf/test/csv.out"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-Wall",
+      "-std=c++20",
+      "-I./include/",
+      "-g",
+      "-DDEBUG",
+      "build/csv.o",
+      "build/dataframe.o",
+      "build/decision_tree.o",
+      "build/field.o",
+      "build/utils.o",
+      "build/vector.o",
+      "-o",
+      "test/decision_tree.out",
+      "test/decision_tree.cpp"
+    ],
+    "directory": "/home/federico/dev/cpp/prf",
+    "file": "/home/federico/dev/cpp/prf/test/decision_tree.cpp",
+    "output": "/home/federico/dev/cpp/prf/test/decision_tree.out"
   }
 ]

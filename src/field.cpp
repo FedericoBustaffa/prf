@@ -1,5 +1,6 @@
 #include "field.hpp"
 
+#include <algorithm>
 #include <regex>
 
 #include "utils.hpp"
@@ -15,9 +16,16 @@ field::field(const std::string& header, const std::vector<std::string>& content)
         m_type = datatype::numerical;
     else
         m_type = datatype::categorical;
+
+    std::vector<std::string> uniques = content;
+    std::sort(uniques.begin(), uniques.end());
+    uniques.erase(std::unique(uniques.begin(), uniques.end()), uniques.end());
+
+    for (size_t i = 0; i < uniques.size(); i++)
+        m_dict[uniques[i]] = (double)i;
 }
 
-std::vector<double> field::as_double() const
+std::vector<double> field::to_vec() const
 {
     if (m_type == datatype::categorical)
         return encode(m_content);

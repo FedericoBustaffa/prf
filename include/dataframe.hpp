@@ -6,6 +6,15 @@
 
 #include "field.hpp"
 
+class dataview
+{
+public:
+    dataview();
+    ~dataview();
+
+private:
+};
+
 class dataframe
 {
 public:
@@ -18,20 +27,20 @@ public:
 
     inline bool empty() const { return m_fields.empty(); }
 
-    inline std::vector<std::string_view> headers() const { return m_headers; }
+    inline const std::vector<std::string>& headers() const { return m_headers; }
 
     inline std::vector<field> fields() const { return m_fields; }
 
+    inline field operator[](size_t i) const { return m_fields[i]; }
+
     field operator[](const std::string_view& header) const;
 
-    std::vector<double> columns() const;
-
-    std::vector<double> rows() const;
+    std::vector<double> to_vec() const;
 
     ~dataframe();
 
 private:
-    std::vector<std::string_view> m_headers;
+    std::vector<std::string> m_headers;
     std::vector<field> m_fields;
 };
 
