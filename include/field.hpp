@@ -29,7 +29,7 @@ public:
         return m_content[i];
     }
 
-    inline double get(size_t i) { return m_dict[m_content[i]]; }
+    double get(size_t i);
 
     std::vector<double> to_vec() const;
 

@@ -11,7 +11,8 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    dataframe df = read_csv(argv[1]);
+    dataframe df = read_csv(argv[1], {"sepal_length", "sepal_width",
+                                      "petal_length", "petal_width", "class"});
 
     std::cout << "--- info ---" << std::endl;
     std::cout << "shape: (" << df.nrows() << ", " << df.ncolumns() << ")"
@@ -24,7 +25,7 @@ int main(int argc, const char** argv)
     for (size_t i = 0; i < X.size(); i++)
     {
         for (size_t j = 0; j < X[i].size(); j++)
-            std::cout << X[i][j] << std::flush;
+            std::cout << X[i][j] << " " << std::flush;
         std::cout << std::endl;
     }
 

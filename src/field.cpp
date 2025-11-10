@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <regex>
 
+#include <iostream>
+
 #include "utils.hpp"
 
 field::field(const std::string& header, const std::vector<std::string>& content)
@@ -15,14 +17,25 @@ field::field(const std::string& header, const std::vector<std::string>& content)
     if (std::regex_search(content[0], numerical))
         m_type = datatype::numerical;
     else
+    {
         m_type = datatype::categorical;
 
-    std::vector<std::string> uniques = content;
-    std::sort(uniques.begin(), uniques.end());
-    uniques.erase(std::unique(uniques.begin(), uniques.end()), uniques.end());
+        std::vector<std::string> uniques = content;
+        std::sort(uniques.begin(), uniques.end());
+        uniques.erase(std::unique(uniques.begin(), uniques.end()),
+                      uniques.end());
 
-    for (size_t i = 0; i < uniques.size(); i++)
-        m_dict[uniques[i]] = (double)i;
+        for (size_t i = 0; i < uniques.size(); i++)
+            m_dict[uniques[i]] = (double)i;
+    }
+}
+
+double field::get(size_t i)
+{
+    if (m_type == datatype::categorical)
+        return m_dict[m_content[i]];
+    else
+        return std::stod(m_content[i]);
 }
 
 std::vector<double> field::to_vec() const

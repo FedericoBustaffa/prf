@@ -45,11 +45,22 @@ std::pair<std::vector<std::vector<double>>, std::vector<double>> build_dataset(
         for (size_t j = 0; j < df.ncolumns(); j++)
         {
             if (df.headers()[j] != target)
-                tmp.push_back(df[i].get(j));
-
-            X.push_back(tmp);
+                tmp.push_back(df[j].get(i));
         }
+        X.push_back(tmp);
     }
 
     return {X, y};
+}
+
+double accuracy(std::vector<double>& guessed, std::vector<double>& correct)
+{
+    double acc = 0.0;
+    for (size_t i = 0; i < guessed.size(); i++)
+    {
+        if (guessed[i] == correct[i])
+            acc += 1;
+    }
+
+    return acc / correct.size();
 }

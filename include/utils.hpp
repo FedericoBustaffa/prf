@@ -14,4 +14,6 @@ std::vector<double> convert(const std::vector<std::string>& values);
 std::pair<std::vector<std::vector<double>>, std::vector<double>> build_dataset(
     const dataframe& df, const std::string& target);
 
+double accuracy(std::vector<double>& guessed, std::vector<double>& correct);
+
 #endif
