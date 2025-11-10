@@ -23,4 +23,30 @@ field dataframe::operator[](const std::string_view& header) const
     return m_fields[idx];
 }
 
+std::vector<double> dataframe::columns() const
+{
+    std::vector<double> values;
+    values.reserve(nrows() * ncolumns());
+
+    for (const auto& f : m_fields)
+        for (const auto& v : f.as_double())
+            values.push_back(v);
+
+    return values;
+}
+
+std::vector<double> dataframe::rows() const
+{
+    std::vector<double> values;
+    values.reserve(nrows() * ncolumns());
+
+    for (size_t i = 0; i < nrows(); i++)
+    {
+        for (const auto& f : m_fields)
+            values.push_back(f.as_double()[i]);
+    }
+
+    return values;
+}
+
 dataframe::~dataframe() {}

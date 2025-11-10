@@ -32,3 +32,10 @@ std::vector<double> convert(const std::vector<std::string>& values)
 
     return converted;
 }
+
+std::pair<matrix, matrix> build_dataset(const dataframe& df,
+                                        const std::string_view& target)
+{
+}
+
+double accuracy(matrix predicted, matrix target) {}

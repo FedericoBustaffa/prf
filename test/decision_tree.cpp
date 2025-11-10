@@ -2,6 +2,8 @@
 #include <vector>
 
 #include "csv.hpp"
+#include "decision_tree.hpp"
+#include "utils.hpp"
 
 int main(int argc, const char** argv)
 {
@@ -15,12 +17,13 @@ int main(int argc, const char** argv)
                                         "petal_length", "petal_width", "label"};
     dataframe df = read_csv(argv[1], headers);
 
-    std::cout << "--- info ---" << std::endl;
-    std::cout << "shape: (" << df.nrows() << ", " << df.ncolumns() << ")"
-              << std::endl;
+    auto [X, y] = build_dataset(df, "label");
 
-    for (const auto& h : df.headers())
-        std::cout << h << ": " << df[h].type() << std::endl;
+    decision_tree dt("entropy");
+    dt.fit(X, y);
+    matrix y_pred = dt.predict(X);
+
+    std::cout << "accuracy: " << accuracy(y_pred, y) << std::endl;
 
     return 0;
 }
