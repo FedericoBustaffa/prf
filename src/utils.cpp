@@ -1,56 +1,43 @@
 #include "utils.hpp"
 
-#include <algorithm>
+#include <unordered_map>
 
-std::vector<double> encode(const std::vector<std::string>& labels)
+std::vector<double> encode(const dataframe* df, size_t col)
 {
-    std::vector<std::string_view> unique_values;
-    std::vector<double> encoded;
-    encoded.reserve(labels.size());
+    const std::vector<std::string>& content = df->content();
+    std::unordered_map<std::string, double> mappings;
 
-    for (const auto& l : labels)
+    std::vector<double> encoded;
+    encoded.reserve(content.size());
+
+    std::string field;
+    unsigned int nvalues = 0; // counter of possible values
+
+    for (size_t i = 0; i < df->nrows(); i++)
     {
-        auto it = std::find(unique_values.begin(), unique_values.end(), l);
-        if (it == unique_values.end())
-        {
-            unique_values.push_back(l);
-            encoded.push_back(unique_values.size() - 1);
-        }
+        field = content[i * df->ncolumns() + col];
+        if (mappings.contains(field))
+            encoded.push_back(mappings[field]);
         else
-            encoded.push_back(std::distance(unique_values.begin(), it));
+        {
+            encoded.push_back(nvalues);
+            mappings[field] = nvalues;
+            nvalues++;
+        }
     }
 
     return encoded;
 }
 
-std::vector<double> convert(const std::vector<std::string>& values)
+std::vector<double> convert(const dataframe* df, size_t col)
 {
+    const std::vector<std::string>& content = df->content();
     std::vector<double> converted;
 
-    for (const auto& v : values)
-        converted.push_back(std::stod(v));
+    for (size_t i = 0; i < df->nrows(); i++)
+        converted.push_back(std::stod(content[i * df->ncolumns() + col]));
 
     return converted;
-}
-
-std::pair<std::vector<std::vector<double>>, std::vector<double>> build_dataset(
-    const dataframe& df, const std::string& target)
-{
-    std::vector<double> y = df[target].to_vec();
-
-    std::vector<std::vector<double>> X;
-    for (size_t i = 0; i < df.nrows(); i++)
-    {
-        std::vector<double> tmp;
-        for (size_t j = 0; j < df.ncolumns(); j++)
-        {
-            if (df.headers()[j] != target)
-                tmp.push_back(df[j].get(i));
-        }
-        X.push_back(tmp);
-    }
-
-    return {X, y};
 }
 
 double accuracy(std::vector<double>& guessed, std::vector<double>& correct)

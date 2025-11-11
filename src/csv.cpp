@@ -1,54 +1,48 @@
 #include "csv.hpp"
 
+#include <cassert>
 #include <fstream>
 #include <sstream>
 #include <string>
 
 #include <iostream>
 
-std::vector<std::string> readline(std::ifstream& file)
+bool readline(std::ifstream& file, std::vector<std::string>& line)
 {
-    std::string line;
-    if (!std::getline(file, line))
-        return {};
+    std::string stringline;
+    if (!std::getline(file, stringline))
+        return false;
 
     std::stringstream ss;
-    ss << line;
+    ss << stringline;
 
     std::string word;
-    std::vector<std::string> tokenized_line;
     while (std::getline(ss, word, ','))
-        tokenized_line.push_back(word);
+        line.push_back(word);
 
-    return tokenized_line;
+    return true;
 }
 
-std::vector<std::string> readline(const std::string& filepath)
+bool readline(const std::string& filepath, std::vector<std::string>& line)
 {
     std::ifstream file(filepath);
-    return readline(file);
+    return readline(file, line);
 }
 
 dataframe read_csv(std::ifstream& file, const std::vector<std::string>& headers)
 {
-    // read the first line to get the number of columns
-    std::vector<std::string> line = readline(file);
+    // the dataframe content
+    std::vector<std::string> buffer;
 
-    // vector of columns
-    std::vector<std::vector<std::string>> buffer(line.size());
-
-    // fill the first row
-    for (size_t i = 0; i < line.size(); i++)
-        buffer[i].push_back(line[i]);
-
-    // fill the rest of the table
-    do
+    // fill the table
+    std::vector<std::string> line;
+    while (readline(file, line))
     {
-        line = readline(file);
-        if (!line.empty())
-            for (size_t i = 0; i < line.size(); i++)
-                buffer[i].push_back(line[i]);
-    } while (!line.empty());
+        assert(line.size() == headers.size());
+        for (size_t i = 0; i < line.size(); i++)
+            buffer.push_back(line[i]);
+        line.clear();
+    }
 
     return dataframe(buffer, headers);
 }
@@ -63,7 +57,8 @@ dataframe read_csv(const std::string& filepath,
 dataframe read_csv(const std::string& filepath)
 {
     std::ifstream file(filepath);
-    std::vector<std::string> headers = readline(file);
+    std::vector<std::string> headers;
+    readline(file, headers);
 
     return read_csv(file, headers);
 }

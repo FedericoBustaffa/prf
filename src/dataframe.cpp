@@ -1,42 +1,44 @@
 #include "dataframe.hpp"
 
-#include <algorithm>
-#include <stdexcept>
+#include <regex>
 
-dataframe::dataframe(const std::vector<std::vector<std::string>>& content,
+#include "utils.hpp"
+
+dataframe::dataframe(const std::vector<std::string>& content,
                      const std::vector<std::string>& headers)
-    : m_headers(headers)
+    : m_nrows(content.size() / headers.size()), m_ncols(headers.size()),
+      m_headers(headers), m_content(content)
 {
-    for (size_t i = 0; i < content.size(); i++)
-        m_fields.emplace_back(headers[i], content[i]);
-}
+    // numerical fields regex
+    std::regex numerical(
+        R"(^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?$)");
 
-column dataframe::operator[](const std::string_view& header) const
-{
-    auto h = std::find(m_headers.begin(), m_headers.end(), header);
-    if (h == m_headers.end())
-        throw std::runtime_error("no such header");
-
-    size_t idx = std::distance(m_headers.begin(), h);
-
-    return m_fields[idx];
+    for (size_t i = 0; i < m_ncols; i++)
+    {
+        // infer columns types
+        if (std::regex_search(content[i], numerical))
+            m_datatypes.push_back(datatype::numerical);
+        else
+            m_datatypes.push_back(datatype::categorical);
+    }
 }
 
 std::vector<double> dataframe::to_vec() const
 {
-    std::vector<double> data;
-    size_t rows = m_fields[0].size();
-    size_t cols = m_fields.size();
-
-    data.reserve(rows * cols);
-
-    for (const auto& f : m_fields)
+    std::vector<double> v(m_content.size());
+    std::vector<double> tmp;
+    for (size_t i = 0; i < m_ncols; i++)
     {
-        for (const auto& v : f.to_vec())
-            data.push_back(v);
+        if (m_datatypes[i] == datatype::categorical)
+            tmp = encode(this, i);
+        else if (m_datatypes[i] == datatype::numerical)
+            tmp = convert(this, i);
+
+        for (size_t j = 0; j < m_nrows; j++)
+            v[j * m_ncols + i] = tmp[j];
     }
 
-    return data;
+    return v;
 }
 
 dataframe::~dataframe() {}
