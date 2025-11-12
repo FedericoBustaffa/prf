@@ -4,9 +4,9 @@
 #include <cstdio>
 #include <unordered_map>
 
-decision_tree::decision_tree() {}
+DecisionTree::DecisionTree() {}
 
-double decision_tree::entropy(const std::vector<double>& y)
+double DecisionTree::entropy(const std::vector<double>& y)
 {
     std::unordered_map<double, double> counters;
     for (size_t i = 0; i < y.size(); i++)
@@ -22,15 +22,15 @@ double decision_tree::entropy(const std::vector<double>& y)
     return s;
 }
 
-void decision_tree::fit(const std::vector<std::vector<double>>& X,
-                        const std::vector<double>& y)
+void DecisionTree::fit(const std::vector<std::vector<double>>& X,
+                       const std::vector<double>& y)
 {
 }
 
-std::vector<double> decision_tree::predict(
+std::vector<double> DecisionTree::predict(
     const std::vector<std::vector<double>>& X)
 {
     return {};
 }
 
-decision_tree::~decision_tree() {}
+DecisionTree::~DecisionTree() {}

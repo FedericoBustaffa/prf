@@ -3,17 +3,17 @@
 
 #include <vector>
 
-class decision_tree
+class DecisionTree
 {
 public:
-    decision_tree();
+    DecisionTree();
 
     void fit(const std::vector<std::vector<double>>& X,
              const std::vector<double>& y);
 
     std::vector<double> predict(const std::vector<std::vector<double>>& X);
 
-    ~decision_tree();
+    ~DecisionTree();
 
 private:
     double entropy(const std::vector<double>& y);

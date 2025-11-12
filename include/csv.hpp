@@ -6,9 +6,9 @@
 
 #include "dataframe.hpp"
 
-dataframe read_csv(const std::string& filepath);
+DataFrame read_csv(const std::string& filepath);
 
-dataframe read_csv(const std::string& filepath,
+DataFrame read_csv(const std::string& filepath,
                    const std::vector<std::string>& headers);
 
 #endif

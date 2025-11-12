@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-std::vector<double> encode(const dataframe* df, size_t col)
+std::vector<double> encode(const DataFrame* df, size_t col)
 {
     const std::vector<std::string>& content = df->content();
     std::unordered_map<std::string, double> mappings;
@@ -13,9 +13,9 @@ std::vector<double> encode(const dataframe* df, size_t col)
     std::string field;
     unsigned int nvalues = 0; // counter of possible values
 
-    for (size_t i = 0; i < df->nrows(); i++)
+    for (size_t i = 0; i < df->rows(); i++)
     {
-        field = content[i * df->ncolumns() + col];
+        field = content[i * df->columns() + col];
         if (mappings.contains(field))
             encoded.push_back(mappings[field]);
         else
@@ -29,13 +29,13 @@ std::vector<double> encode(const dataframe* df, size_t col)
     return encoded;
 }
 
-std::vector<double> convert(const dataframe* df, size_t col)
+std::vector<double> convert(const DataFrame* df, size_t col)
 {
     const std::vector<std::string>& content = df->content();
     std::vector<double> converted;
 
-    for (size_t i = 0; i < df->nrows(); i++)
-        converted.push_back(std::stod(content[i * df->ncolumns() + col]));
+    for (size_t i = 0; i < df->rows(); i++)
+        converted.push_back(std::stod(content[i * df->columns() + col]));
 
     return converted;
 }

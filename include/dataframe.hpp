@@ -5,46 +5,61 @@
 #include <string>
 #include <vector>
 
-class dataframe
+enum class DataType
 {
-public:
-    enum class datatype
-    {
-        numerical,
-        categorical
-    };
-
-public:
-    dataframe(const std::vector<std::string>& content,
-              const std::vector<std::string>& headers);
-
-    inline size_t nrows() const { return m_nrows; }
-
-    inline size_t ncolumns() const { return m_ncols; }
-
-    inline const std::vector<std::string>& headers() const { return m_headers; }
-
-    inline const std::vector<datatype>& datatypes() const
-    {
-        return m_datatypes;
-    }
-
-    inline const std::vector<std::string>& content() const { return m_content; }
-
-    std::vector<double> to_vec() const;
-
-    ~dataframe();
-
-private:
-    size_t m_nrows, m_ncols;
-    std::vector<std::string> m_headers;
-    std::vector<datatype> m_datatypes;
-    std::vector<std::string> m_content;
+    numerical,
+    categorical
 };
 
-inline std::ostream& operator<<(std::ostream& os, dataframe::datatype dt)
+class DataView
 {
-    if (dt == dataframe::datatype::numerical)
+public:
+    DataView();
+
+    ~DataView();
+
+private:
+    size_t m_RowBegin, m_ColumnBegin;
+    size_t m_RowEnd, m_ColumnEnd;
+
+    std::vector<std::string>* m_Headers;
+    std::vector<DataType>* m_DataTypes;
+    std::vector<std::string>* m_View;
+};
+
+class DataFrame
+{
+public:
+    DataFrame(const std::vector<std::string>& content,
+              const std::vector<std::string>& headers);
+
+    inline size_t rows() const { return m_Rows; }
+
+    inline size_t columns() const { return m_Columns; }
+
+    inline const std::vector<std::string>& headers() const { return m_Headers; }
+
+    inline const std::vector<DataType>& datatypes() const
+    {
+        return m_DataTypes;
+    }
+
+    inline const std::vector<std::string>& content() const { return m_Content; }
+
+    std::vector<double> toTensor() const;
+
+    ~DataFrame();
+
+private:
+    size_t m_Rows, m_Columns;
+    std::vector<std::string> m_Headers;
+    std::vector<DataType> m_DataTypes;
+    std::vector<std::string> m_Content;
+};
+
+inline std::ostream& operator<<(std::ostream& os, DataType dt)
+{
+    if (dt == DataType::numerical)
         os << "numerical";
     else
         os << "categorical";

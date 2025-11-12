@@ -11,10 +11,14 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    dataframe df = read_csv(argv[1], {"sepal_length", "sepal_width",
-                                      "petal_length", "petal_width", "class"});
+    std::vector<std::string> headers = {"sepal_length", "sepal_width",
+                                        "petal_length", "petal_width", "class"};
 
-    std::vector<double> v = df.to_vec();
+    std::string filepath(argv[1]);
+    DataFrame df = read_csv(filepath, headers);
+
+    // DataView features = df.slice(0, 4);
+    // DataView targets = df.slice(4);
 
     // decision_tree tree;
     // tree.fit(X, y);
