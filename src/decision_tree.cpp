@@ -24,7 +24,11 @@ double DecisionTree::entropy(const Vector& y)
 
 void DecisionTree::fit(const Matrix& X, const Vector& y)
 {
-    std::printf("entropy: %.3f\n", entropy(y));
+    // 1. sort by feature
+    // 2. candidate thresholds
+    // 3. best threshold for every feature
+    // 4. best feature
+    // 5. split
 }
 
 Vector DecisionTree::predict(const Matrix& X) { return Vector(nullptr, 0); }

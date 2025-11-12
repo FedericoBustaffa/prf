@@ -12,6 +12,10 @@ public:
 
     Matrix(Matrix&& other);
 
+    inline size_t rows() const { return m_Rows; }
+
+    inline size_t cols() const { return m_Cols; }
+
     ~Matrix();
 
 private:

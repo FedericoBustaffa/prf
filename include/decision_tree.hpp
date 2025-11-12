@@ -1,6 +1,8 @@
 #ifndef DECISION_TREE_HPP
 #define DECISION_TREE_HPP
 
+#include <vector>
+
 #include "matrix.hpp"
 #include "vector.hpp"
 

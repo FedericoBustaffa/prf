@@ -20,4 +20,23 @@ Vector::Vector(Vector&& other) : m_Size(other.m_Size), m_Data(other.m_Data)
     other.m_Data = nullptr;
 }
 
+void Vector::operator=(const Vector& other)
+{
+    m_Size = other.m_Size;
+
+    delete[] m_Data;
+    m_Data = new double[m_Size];
+    std::memcpy(m_Data, other.m_Data, m_Size * sizeof(double));
+}
+
+void Vector::operator=(Vector&& other)
+{
+    m_Size = other.m_Size;
+    other.m_Size = 0;
+
+    delete[] m_Data;
+    m_Data = other.m_Data;
+    other.m_Data = nullptr;
+}
+
 Vector::~Vector() { delete[] m_Data; }

@@ -12,6 +12,10 @@ public:
 
     Vector(Vector&& other);
 
+    void operator=(const Vector& other);
+
+    void operator=(Vector&& other);
+
     inline size_t size() const { return m_Size; }
 
     inline double& operator[](size_t i) { return m_Data[i]; }
