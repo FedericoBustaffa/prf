@@ -10,6 +10,8 @@ public:
 
     TensorView(const TensorView& other);
 
+    TensorView(TensorView&& other);
+
     virtual inline const std::vector<size_t>& shape() const { return m_Shape; }
 
     virtual inline const size_t ndim() const { return m_Shape.size(); }
@@ -18,7 +20,9 @@ public:
 
     virtual inline operator double() const { return *m_View; }
 
-    void operator=(const TensorView& other);
+    TensorView& operator=(const TensorView& other);
+
+    TensorView& operator=(TensorView&& other);
 
     virtual TensorView operator[](size_t i) const;
 
@@ -28,9 +32,7 @@ protected:
     std::vector<size_t> m_Shape;
     size_t m_Size;
     std::vector<size_t> m_Strides;
-
-private:
-    const double* m_View;
+    const double* m_View = nullptr;
 };
 
 #endif

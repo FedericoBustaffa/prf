@@ -32,12 +32,33 @@ TensorView::TensorView(const TensorView& other)
 {
 }
 
-void TensorView::operator=(const TensorView& other)
+TensorView::TensorView(TensorView&& other)
+    : m_Shape(std::move(other.m_Shape)), m_Size(other.m_Size),
+      m_Strides(std::move(other.m_Strides)), m_View(other.m_View)
+{
+    other.m_View = nullptr;
+}
+
+TensorView& TensorView::operator=(const TensorView& other)
 {
     m_Shape = other.m_Shape;
     m_Size = other.m_Size;
     m_Strides = other.m_Strides;
     m_View = other.m_View;
+
+    return *this;
+}
+
+TensorView& TensorView::operator=(TensorView&& other)
+{
+    m_Shape = std::move(other.m_Shape);
+    m_Size = other.m_Size;
+    m_Strides = std::move(other.m_Strides);
+    m_View = other.m_View;
+
+    other.m_View = nullptr;
+
+    return *this;
 }
 
 TensorView TensorView::operator[](size_t i) const

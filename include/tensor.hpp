@@ -14,9 +14,9 @@ public:
 
     Tensor(Tensor&& other);
 
-    void operator=(const Tensor& other);
+    Tensor& operator=(const Tensor& other);
 
-    void operator=(Tensor&& other);
+    Tensor& operator=(Tensor&& other);
 
     ~Tensor();
 
